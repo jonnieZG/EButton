@@ -6,32 +6,36 @@ being properly handled, and fine grained, well defined events. Besides that, I w
 unneeded features, making its memory footprint as small as possible.
 
 ## Quick Start
-1. Include the library. (doh!)
-2. Instantiate the **`EButton`** object, specfying a pin (the pin is connected to one lead of the button, while its other lead is
-   connected to GND.
+1. Include the library. *(doh!)*
+2. Instantiate the **`EButton`** object, specfying a pin (connected to one lead of the button, while its other lead is connected to GND.
 3. Write handler method(s) and attach them to the class.
 4. Keep executing the object's `tick()` method in a loop. It does all the magic - reads button state changes and triggers appropriate
    events when detected.
 
 ## Clicks and Long-Presses
 The class defines two major event types - a **Click** and a **Long-Press**:
-* **Click** - an event when the button is released, and it was not in a LONG_PRESSED state;
+* **Click** - an event when the button is released, and it was not in a **Long-Press** state;
 * **Long-Press** - when the button is kept pressed at least for a time specified by parameter called `longPressTime`;
 
 ## Counting Clicks
-It is important to define how long the class will be counting clicks, to tell apart if a button was clicked twice, and if there
+It is important to define how long the class will be counting clicks, to tell apart if a button was clicked twice, or if there
 was a double-click (or even a 5-click if you're fast enough).
 
 The parameter called `clickTime` is a value in milliseconds, defining how long will the driver wait since the last click, before
 wrapping up the count. It does *not* mean that all the clicks have to be performed in that period, but it does specify the maxium
-allowed distance between two adjacent clicks that form a group.
+allowed distance between two adjacent clicks.
+
+There are 3 handler slots available for defining custom methods that act on a given number of clicks:
+* `singleClickMethod` - Called if there was a single click;
+* `doubleClickMethod` - Called if there was a double click;
+* `anyClickMethod` - Called when clicks counting is done. Use `getClicks()` to get the clicks count.
 
 ## Events
 Events are listed in their order of appearence:
 
 1. `TRANSITION`- triggered each time the button state changes from pressed to released, or back;
 2. `EACH_CLICK` - triggered each time the key is released, unless it was in `LONG_PRESSED` state;
-3. `ANY_CLICK` - triggered after all the clicks have been counted (use getClicks() to get the clicks count);
+3. `ANY_CLICK` - triggered after all the clicks have been counted (use `getClicks()` to get the clicks count);
 4. `SINGLE_CLICK` - triggered when there was exactly one click;
 5. `DOUBLE_CLICK` - triggered when there were exactly two clicks;
 6. `LONG_PRESS_START`  triggered once, at the beginning of a long press (after a `TRANSITION` to pressed);
@@ -40,8 +44,20 @@ Events are listed in their order of appearence:
 
 Generally, in most of cases it will be enough to handle a SINGLE_CLICK, but that is up to you.
 
-**NOTE:** It is important to stress the difference between `EACH_CLICK` and `ANY_CLICK`: the first one is called **each time**
-the key is released (unless it was a long-press), while `ANY_CLICK` is called **once**, at the end of clicks counting.
+> **NOTE:** It is important to stress the difference between `EACH_CLICK` and `ANY_CLICK`: the first one is called **each time**
+> the key is released (unless it was a long-press), while `ANY_CLICK` is called **once**, at the end of clicks counting.
+
+## Handler Methods
+For each event there is a slot where you can slip your own methods that is triggered when a corresponding event is detected.
+
+A handler method can be any method returning `void` and accepting one `EButton&` parameter. 
+```C++
+void anyClick(EButton &btn) {
+   Serial.print("Counted clicks: ");
+   Serial.println(btn.getClicks();
+}
+```
+All handler methods are optional, and initially set to `NULL`.
 
 
 ## Debouncing
