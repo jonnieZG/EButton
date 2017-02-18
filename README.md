@@ -18,8 +18,8 @@ The class defines two major event types - a **Click** and a **Long-Press**:
 * **Long-Press** - when the button is kept pressed at least for a time specified by parameter called `longPressTime`;
 
 ## Counting Clicks
-It is important to define how long the class will be counting clicks, to tell apart if a button was clicked twice, or if there
-was a double-click (or even a 5-click if you're fast enough).
+It is important to define how long the class will be counting clicks, to tell apart if there were two discrete clicks, or one
+double-click (or even a 5-click if you're fast enough).
 
 The parameter called `clickTime` is a value in milliseconds, defining how long will the driver wait since the last click, before
 wrapping up the count. It does *not* mean that all the clicks have to be performed in that period, but it does specify the maxium
