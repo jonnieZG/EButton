@@ -33,9 +33,9 @@ void EButton::attachEachClick(EButtonEventHandler method) {
 }
 #endif
 
-#ifdef EBUTTON_SUPPORT_ANY_CLICK
-void EButton::attachAnyClick(EButtonEventHandler method) {
-	anyClickMethod = method;
+#ifdef EBUTTON_SUPPORT_DONE_CLICKING
+void EButton::attachDoneClicking(EButtonEventHandler method) {
+	doneClickingMethod = method;
 }
 #endif
 
@@ -150,10 +150,10 @@ void EButton::tick() {
 			transition(now);
 		} else {
 			if (sinceLastTransition >= clickTime) {
-#ifdef EBUTTON_SUPPORT_ANY_CLICK
+#ifdef EBUTTON_SUPPORT_DONE_CLICKING
 				// Handling any-click
-				if (anyClickMethod != NULL)
-					anyClickMethod(*this);
+				if (doneClickingMethod != NULL)
+					doneClickingMethod(*this);
 #endif
 #ifdef EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
 				// Handling single-click
