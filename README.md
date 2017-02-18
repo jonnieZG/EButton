@@ -8,9 +8,36 @@ unneeded features, making its memory footprint as small as possible.
 ## Quick Start
 1. Include the library. *(doh!)*
 2. Instantiate the **`EButton`** object, specfying a pin (connected to one lead of the button, while its other lead is connected to GND.
-3. Write handler method(s) and attach them to the class.
-4. Keep executing the object's `tick()` method in a loop. It does all the magic - reads button state changes and triggers appropriate
+3. Write handler method(s).
+4. Attaching handlers.
+5. Keep executing the object's `tick()` method in a loop. It does all the magic - reads button state changes and triggers appropriate
    events when detected.
+
+```C++
+#include "Arduino.h"
+// 1. Including the library
+#include "EButton.h"
+
+// 2. Instantiating the object
+EButton button(2);
+
+// 3. Handler method for a single-click
+void singleClick(EButton &btn) {
+	Serial.println("We have a single-click!");
+}
+
+void setup() {
+	Serial.begin(115200);
+// 4. Attach the handler
+	button.attachSingleClick(singleClick);
+	Serial.println("\nClick or double-click!");
+}
+
+void loop() {
+// 5. Tick the object in a loop
+	button.tick();
+}
+```
 
 ## Clicks and Long-Presses
 The class defines two major event types - a **Click** and a **Long-Press**:
