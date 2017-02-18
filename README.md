@@ -14,7 +14,7 @@ unneeded features, making its memory footprint as small as possible.
 
 ## Clicks and Long-Presses
 The class defines two major event types - a **Click** and a **Long-Press**:
-* **Click** - an event when the button is released, and it was not in a **Long-Press** state;
+* **Click** - an event when the button is released (except when coming from a **Long-Press** state);
 * **Long-Press** - when the button is kept pressed at least for a time specified by parameter called `longPressTime`;
 
 ## Counting Clicks
@@ -25,17 +25,17 @@ The parameter called `clickTime` is a value in milliseconds, defining how long w
 wrapping up the count. It does *not* mean that all the clicks have to be performed in that period, but it does specify the maxium
 allowed distance between two adjacent clicks.
 
-There are 3 handler slots available for defining custom methods that act on a given number of clicks:
+There are 3 of 8 handler slots available for defining custom methods that act on a given number of clicks:
 * `singleClickMethod` - Called if there was a single click;
 * `doubleClickMethod` - Called if there was a double click;
-* `anyClickMethod` - Called when clicks counting is done. Use `getClicks()` to get the clicks count.
+* `doneClickingMethod` - Called when clicks counting is done. Use `getClicks()` to get the clicks count.
 
 ## Events
 Events are listed in their order of appearence:
 
 1. `TRANSITION`- triggered each time the button state changes from pressed to released, or back;
 2. `EACH_CLICK` - triggered each time the key is released, unless it was in `LONG_PRESSED` state;
-3. `ANY_CLICK` - triggered after all the clicks have been counted (use `getClicks()` to get the clicks count);
+3. `DONE_CLICKING` - triggered after all the clicks have been counted (use `getClicks()` to get the clicks count);
 4. `SINGLE_CLICK` - triggered when there was exactly one click;
 5. `DOUBLE_CLICK` - triggered when there were exactly two clicks;
 6. `LONG_PRESS_START`  triggered once, at the beginning of a long press (after a `TRANSITION` to pressed);
@@ -44,15 +44,32 @@ Events are listed in their order of appearence:
 
 Generally, in most of cases it will be enough to handle a SINGLE_CLICK, but that is up to you.
 
-> **NOTE:** It is important to stress the difference between `EACH_CLICK` and `ANY_CLICK`: the first one is called **each time**
-> the key is released (unless it was a long-press), while `ANY_CLICK` is called **once**, at the end of clicks counting.
+> **NOTE:** It is important to stress the difference between `EACH_CLICK` and `DONE_CLICKING`: the first one is called **each time**
+> the key is released (unless it was a long-press), while `DONE_CLICKING` is called **once**, at the end of clicks counting.
+
+## Mixing Clicks and Presses
+Events `DONE_CLICKING`, `SINGLE_CLICK`, and `DOUBLE_CLICK` will be triggered *only after the last click*.
+
+Therefore, if you perform a click, immediatelly followed by a long press, the `DONE_CLICKING` and `SINGLE_CLICK` events *will not be
+triggered*! Instead, the following sequence of events will be triggered:
+
+1. `TRANSITION` (after first key-down)
+2. `TRANSITION` (after first key-release)
+3. `EACH_CLICK` (after TRANSITION of the first-key release)
+4. `TRANSITION` (after second key-down)
+5. `LONG_PRESS_START` (1 second after the key was pressed and held pressed)
+6. `DURING_LONG_PRESS` (on each tick until the key is released)
+7. `LONG_PRESS_END` (when the key is finally released)
+
+Furhermore, *after the long press has ended, the button's state will be reset*. This will result in any further clicks that might be
+following the long press, being interpreted as a new series of clicks, separate from the previous sequence.
 
 ## Handler Methods
 For each event there is a slot where you can slip your own methods that is triggered when a corresponding event is detected.
 
 A handler method can be any method returning `void` and accepting one `EButton&` parameter. 
 ```C++
-void anyClick(EButton &btn) {
+void doneClicking(EButton &btn) {
    Serial.print("Counted clicks: ");
    Serial.println(btn.getClicks());
 }
@@ -65,11 +82,11 @@ To disable a feature, just comment out its corresponding `#define` entry in the 
 ```C++
 #define EBUTTON_SUPPORT_TRANSITION
 #define EBUTTON_SUPPORT_EACH_CLICK
-#define EBUTTON_SUPPORT_ANY_CLICK
+#define EBUTTON_SUPPORT_DONE_CLICKING
 #define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
 #define EBUTTON_SUPPORT_LONG_PRESS
 ```
-> **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `ANY_CLICK` event to process
+> **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `DONE_CLICKING` event to process
 > single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count.
 
 ## Debouncing
@@ -153,8 +170,8 @@ void doubleClickHandler(EButton &btn) {
 	Serial.print(F("DOUBLE_CLICK"));
 	print(btn);
 }
-void anyClickHandler(EButton &btn) {
-	Serial.print(F("ANY_CLICK"));
+void doneClickingHandler(EButton &btn) {
+	Serial.print(F("DONE_CLICKING"));
 	print(btn);
 }
 
@@ -189,7 +206,7 @@ void setup() {
 
 	button.attachTransition(transitionHandler);
 	button.attachEachClick(eachClickHandler);
-	button.attachAnyClick(anyClickHandler);
+	button.attachDoneClicking(doneClickingHandler);
 	button.attachSingleClick(singleClickHandler);
 	button.attachDoubleClick(doubleClickHandler);
 	button.attachLongPressStart(pressStartHandler);
@@ -219,7 +236,7 @@ void countClicks(EButton &btn) {
 }
 void setup() {
 	Serial.begin(115200);
-	button.attachAnyClick(countClicks);
+	button.attachDoneClicking(countClicks);
 	Serial.println("\nClick as fast as you can!");
 }
 
@@ -241,7 +258,7 @@ void loop() {
 - `void` `setDebounceTime(byte time)` - Setting debounce time in milliseconds. Default is `EBUTTON_DEFAULT_DEBOUNCE`.
 
 - `void` `setClickTime(byte time)` - Setting delay after the button was released, when clicks counting ends. In other words,
-   this is a delay before triggering `singleClick`, `doubleClick`, or `anyClick event`. Default is `EBUTTON_DEFAULT_CLICK`.
+   this is a delay before triggering `singleClick`, `doubleClick`, or `doneClicking event`. Default is `EBUTTON_DEFAULT_CLICK`.
   
 - `void` `setLongPressTime(byte time)` - Setting minimum time that the button has to be pressed in order to start LONG_PRESSED state.
    Default is `EBUTTON_DEFAULT_LONG_PRESS`.
@@ -251,7 +268,7 @@ void loop() {
 - `void` `attachEachClick(EButtonEventHandler methods)` - Attaches a method that is triggered each time the key goes up (gets
    released), while not in LONG_PRESSED state.
 
-- `void` `attachAnyClick(EButtonEventHandler methods)` - Attaches a method that is triggered after all the clicks have been counted.
+- `void` `attachDoneClicking(EButtonEventHandler methods)` - Attaches a method that is triggered after all the clicks have been counted.
    
 - `void` `attachSingleClick(EButtonEventHandler methods)` - Attaches a method that is triggered when there was exactly one click.
 
