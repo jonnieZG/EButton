@@ -1,0 +1,47 @@
+#######################################
+# Syntax Coloring
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+EButton	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setDebounceTime	KEYWORD2
+setClickTime	KEYWORD2
+setLongPressTime	KEYWORD2
+attachTransition	KEYWORD2
+attachEachClick	KEYWORD2
+attachAnyClick	KEYWORD2
+attachSingleClick	KEYWORD2
+attachDoubleClick	KEYWORD2
+attachLongPressStart	KEYWORD2
+attachDuringLongPress	KEYWORD2
+attachLongPressEnd	KEYWORD2
+reset	KEYWORD2
+tick	KEYWORD2
+getPin	KEYWORD2
+getClicks	KEYWORD2
+isButtonPressed	KEYWORD2
+isLongPressed	KEYWORD2
+getStartTime	KEYWORD2
+getLastTransitionTime	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+EBUTTON_DEFAULT_DEBOUNCE LITERAL1
+EBUTTON_DEFAULT_CLICK LITERAL1
+EBUTTON_DEFAULT_LONG_PRESS LITERAL1
+EBUTTON_SUPPORT_TRANSITION LITERAL1
+EBUTTON_SUPPORT_EACH_CLICK LITERAL1
+EBUTTON_SUPPORT_ANY_CLICK LITERAL1
+EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS LITERAL1
+EBUTTON_SUPPORT_LONG_PRESS LITERAL1
+
+
