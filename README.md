@@ -104,7 +104,8 @@ void doneClicking(EButton &btn) {
 All handler methods are optional, and initially set to `NULL`.
 
 ## Cutting Down Memory Footprint
-If the memory becomes an issue in your project, you can easily decrease the driver's footprint by disabling the unneeded events.
+If the memory becomes an issue in your project, you can easily decrease the driver's footprint by disabling support for unneeded events.
+
 To disable a feature, just comment out its corresponding `#define` entry in the driver's header file:
 ```C++
 #define EBUTTON_SUPPORT_TRANSITION
