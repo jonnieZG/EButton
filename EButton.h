@@ -15,7 +15,7 @@
  * -----------------
  * - TRANSITION			- triggered each time the button state changes from pressed to released, or back
  * - EACH_CLICK			- triggered each time the key is released, unless it was in LONG_PRESSED state
- * - ANY_CLICK			- triggered after all the clicks have been counted (use getClicks() to get the clicks count)
+ * - DONE_CLICKING		- triggered after all the clicks have been counted (use getClicks() to get the clicks count)
  * - SINGLE_CLICK		- triggered when there was exactly one click
  * - DOUBLE_CLICK		- triggered when there were exactly two clicks
  * - LONG_PRESS_START	- triggered once, at the beginning of a long press (after TRANSITION to pressed)
@@ -44,7 +44,7 @@
 // You can disable any of the features you don't need, to minimize memory footprint
 #define EBUTTON_SUPPORT_TRANSITION
 #define EBUTTON_SUPPORT_EACH_CLICK
-#define EBUTTON_SUPPORT_ANY_CLICK
+#define EBUTTON_SUPPORT_DONE_CLICKING
 #define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
 #define EBUTTON_SUPPORT_LONG_PRESS
 
@@ -77,7 +77,7 @@ public:
 	// Debounce time - delay after the first transition, before sampling the next state.
 	void setDebounceTime(byte time);
 	// Click time - delay after the button was released, when clicks counting ends.
-	// (Delay before triggering singleClick, doubleClick, or anyClick event.)
+	// (Delay before triggering singleClick, doubleClick, or doneClicking event.)
 	void setClickTime(unsigned int time);
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
 	// Long-Press time - minimum time to keep the button pressed in order to start LONG_PRESSED state.
@@ -91,9 +91,9 @@ public:
 	// Attaches a method that is triggered each time the key goes up, while not in LONG_PRESSED state - triggered second
 	void attachEachClick(EButtonEventHandler method);
 #endif
-#ifdef EBUTTON_SUPPORT_ANY_CLICK
+#ifdef EBUTTON_SUPPORT_DONE_CLICKING
 	// Attaches a method that is triggered after all the clicks have been counted - triggered third
-	void attachAnyClick(EButtonEventHandler method);
+	void attachDoneClicking(EButtonEventHandler method);
 #endif
 #ifdef EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
 	// Attaches a method that is triggered when there was exactly one click - triggered fourth
@@ -160,8 +160,8 @@ private:
 	EButtonEventHandler singleClickMethod = NULL;
 	EButtonEventHandler doubleClickMethod = NULL;
 #endif
-#ifdef EBUTTON_SUPPORT_ANY_CLICK
-	EButtonEventHandler anyClickMethod = NULL;
+#ifdef EBUTTON_SUPPORT_DONE_CLICKING
+	EButtonEventHandler doneClickingMethod = NULL;
 #endif
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
 	EButtonEventHandler longPressStartMethod = NULL;
