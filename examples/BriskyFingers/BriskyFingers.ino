@@ -10,7 +10,7 @@ void countClicks(EButton &btn) {
 }
 void setup() {
 	Serial.begin(115200);
-	button.attachAnyClick(countClicks);
+	button.attachDoneClicking(countClicks);
 	Serial.println("\nClick as fast as you can!");
 }
 
