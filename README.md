@@ -1,4 +1,4 @@
-# EButton
+# EButton - Single Button Driver
 
 ## Why This One?
 I wrote this library in need of a reliable, compact driver for controlling a single key in my **`Arduino`** projects, with debouncing
@@ -54,11 +54,23 @@ A handler method can be any method returning `void` and accepting one `EButton&`
 ```C++
 void anyClick(EButton &btn) {
    Serial.print("Counted clicks: ");
-   Serial.println(btn.getClicks();
+   Serial.println(btn.getClicks());
 }
 ```
 All handler methods are optional, and initially set to `NULL`.
 
+## Cutting Down Memory Footprint
+If the memory becomes an issue in your project, you can easily decrease the driver's footprint by disabling the unneeded events.
+To disable a feature, just comment out its corresponding `#define` entry in the driver's header file:
+```C++
+#define EBUTTON_SUPPORT_TRANSITION
+#define EBUTTON_SUPPORT_EACH_CLICK
+#define EBUTTON_SUPPORT_ANY_CLICK
+#define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
+#define EBUTTON_SUPPORT_LONG_PRESS
+```
+> **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `ANY_CLICK` event to process
+> single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count.
 
 ## Debouncing
 Due to imperfections of electrical contacts, in most buttons and switches, the state does not just go from one state to another and
@@ -73,3 +85,114 @@ The driver uses a default debounce value defined with the `EBUTTON_DEFAULT_DEBOU
 can always change that value using the `setDebounceTime` method. Its parameter is a `byte`, since a debounce value should never go above
 255.
 
+## Examples
+### Handling All Events
+```C++
+#include "Arduino.h"
+#include "EButton.h"
+
+EButton button(2);
+
+// ------- Printing event details --------
+void print(EButton &btn) {
+	Serial.print(F(" [pressed="));
+	Serial.print(btn.isButtonPressed());
+	Serial.print(F(", clicks="));
+	Serial.print(btn.getClicks());
+	Serial.print(F(", startTime="));
+	Serial.print(btn.getStartTime());
+	Serial.print(F(", lastTransitionTime="));
+	Serial.print(btn.getLastTransitionTime());
+	Serial.println(F("]"));
+}
+
+// ------- Handler methods --------
+void transitionHandler(EButton &btn) {
+	Serial.print(F("TRANSITION"));
+	print(btn);
+}
+void eachClickHandler(EButton &btn) {
+	Serial.print(F("EACH_CLICK"));
+	print(btn);
+}
+void singleClickHandler(EButton &btn) {
+	Serial.print(F("SINGLE_CLICK"));
+	print(btn);
+}
+void doubleClickHandler(EButton &btn) {
+	Serial.print(F("DOUBLE_CLICK"));
+	print(btn);
+}
+void anyClickHandler(EButton &btn) {
+	Serial.print(F("ANY_CLICK"));
+	print(btn);
+}
+
+void pressStartHandler(EButton &btn) {
+	Serial.print(F("PRESS_START"));
+	print(btn);
+}
+
+unsigned long t;
+void duringPressHandler(EButton &btn) {
+	if ((unsigned long) (millis() - t) > 1000) {
+		// Print once a second
+		Serial.print(F("DURING_PRESS"));
+		print(btn);
+		t = millis();
+	}
+}
+
+void pressEndHandler(EButton &btn) {
+	Serial.print(F("PRESS_END"));
+	print(btn);
+}
+
+// ------- Setting up the driver and registering listeners --------
+void setup() {
+	Serial.begin(115200);
+	Serial.println(F("\nEButton Demo"));
+
+	button.setDebounceTime(EBUTTON_DEFAULT_DEBOUNCE);		// not required if using default
+	button.setClickTime(EBUTTON_DEFAULT_CLICK);				// not required if using default
+	button.setLongPressTime(EBUTTON_DEFAULT_LONG_PRESS);	// not required if using default
+
+	button.attachTransition(transitionHandler);
+	button.attachEachClick(eachClickHandler);
+	button.attachAnyClick(anyClickHandler);
+	button.attachSingleClick(singleClickHandler);
+	button.attachDoubleClick(doubleClickHandler);
+	button.attachLongPressStart(pressStartHandler);
+	button.attachDuringLongPress(duringPressHandler);
+	button.attachLongPressEnd(pressEndHandler);
+}
+
+void loop() {
+	// Ticking the driver in a loop
+	button.tick();
+}
+```
+### Brisky Fingers Game
+This simple "game" just counts how fast you can click in a sequence.
+
+```C++
+#include "Arduino.h"
+#include "EButton.h"
+
+EButton button(2);
+
+void countClicks(EButton &btn) {
+	Serial.print("\nYou've managed to click ");
+	Serial.print(btn.getClicks());
+	Serial.println(" time(s)!");
+}
+void setup() {
+	Serial.begin(115200);
+	button.attachAnyClick(countClicks);
+	Serial.println("\nClick as fast as you can!");
+}
+
+void loop() {
+	button.tick();
+}
+```
