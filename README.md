@@ -248,8 +248,8 @@ void loop() {
 
 - `void` `attachTransition(EButtonEventHandler methods)` - Attaches a method that is triggered on each transition (state change).
 
-- `void` `attachEachClick(EButtonEventHandler methods)` - Attaches a method that is triggered each time the key goes up, while not
-   in LONG_PRESSED state.
+- `void` `attachEachClick(EButtonEventHandler methods)` - Attaches a method that is triggered each time the key goes up (gets
+   released), while not in LONG_PRESSED state.
 
 - `void` `attachAnyClick(EButtonEventHandler methods)` - Attaches a method that is triggered after all the clicks have been counted.
    
