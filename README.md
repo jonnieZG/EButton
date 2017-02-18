@@ -86,6 +86,35 @@ can always change that value using the `setDebounceTime` method. Its parameter i
 255.
 
 ## Examples
+### Single and Double-Click
+This example just listens for single and double clicks.
+```C++
+#include "Arduino.h"
+#include "EButton.h"
+
+EButton button(2);
+
+void singleClick(EButton &btn) {
+	Serial.println("We have a click!");
+}
+
+void doubleClick(EButton &btn) {
+	Serial.println("We have a double click!");
+}
+
+void setup() {
+	Serial.begin(115200);
+	button.attachSingleClick(singleClick);
+	button.attachDoubleClick(doubleClick);
+
+	Serial.println("\nClick or double-click!");
+}
+
+void loop() {
+	button.tick();
+}
+```
+
 ### Handling All Events
 ```C++
 #include "Arduino.h"
@@ -172,6 +201,7 @@ void loop() {
 	button.tick();
 }
 ```
+
 ### Brisky Fingers Game
 This simple "game" just counts how fast you can click in a sequence.
 
