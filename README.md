@@ -15,10 +15,10 @@ unneeded features, making its memory footprint as small as possible.
 
 ```C++
 #include "Arduino.h"
-// 1. Including the library
+// 1. Include the library
 #include "EButton.h"
 
-// 2. Instantiating the object
+// 2. Instantiate the object and attach it to PIN 2
 EButton button(2);
 
 // 3. Handler method for a single-click
