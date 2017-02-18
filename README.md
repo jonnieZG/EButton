@@ -116,6 +116,7 @@ void loop() {
 ```
 
 ### Handling All Events
+This example will give you a good picture about the order in which the events are processed.
 ```C++
 #include "Arduino.h"
 #include "EButton.h"
@@ -226,3 +227,65 @@ void loop() {
 	button.tick();
 }
 ```
+--------------------------------------------------
+## Library Reference
+### `EButtonEventHandler` type
+
+- `typedef void (*EButtonEventHandler)(EButton&);` - references to handler methods.
+
+### `EButton` class
+
+- `EButton(byte pin, bool pressedLow = true)` - Constructor specifying attached pin and used logic. `pressedLow` is `true`,
+  if using a pull-down switch.
+  
+- `void` `setDebounceTime(byte time)` - Setting debounce time in milliseconds. Default is `EBUTTON_DEFAULT_DEBOUNCE`.
+
+- `void` `setClickTime(byte time)` - Setting delay after the button was released, when clicks counting ends. In other words,
+   this is a delay before triggering `singleClick`, `doubleClick`, or `anyClick event`. Default is `EBUTTON_DEFAULT_CLICK`.
+  
+- `void` `setLongPressTime(byte time)` - Setting minimum time that the button has to be pressed in order to start LONG_PRESSED state.
+   Default is `EBUTTON_DEFAULT_LONG_PRESS`.
+
+- `void` `attachTransition(EButtonEventHandler methods)` - Attaches a method that is triggered on each transition (state change).
+
+- `void` `attachEachClick(EButtonEventHandler methods)` - Attaches a method that is triggered each time the key goes up, while not
+   in LONG_PRESSED state.
+
+- `void` `attachAnyClick(EButtonEventHandler methods)` - Attaches a method that is triggered after all the clicks have been counted.
+   
+- `void` `attachSingleClick(EButtonEventHandler methods)` - Attaches a method that is triggered when there was exactly one click.
+
+- `void` `attachDoubleClick(EButtonEventHandler methods)` - Attaches a method that is triggered when there were exactly two clicks.
+
+- `void` `attachLongPressStart(EButtonEventHandler methods)` - Attaches a method that is triggered once, at the beginning of a long
+   press.
+   
+- `void` `attachDuringLongPress(EButtonEventHandler methods)` - Attaches a method that is triggered on each `tick()` during a long
+   press.
+
+- `void` `attachLongPressEnd(EButtonEventHandler methods)` - Attaches a method that is triggered once, at the end of a long press.
+
+- `void` `reset()` - Reset state.
+
+- `void` `tick()` - Update/tick the button. This method has to be called in a loop.
+
+- `byte` `getPin()` - Returns attached pin number.
+
+- `byte` `getClicks()` - Returns number of performed clicks.
+
+- `bool` `isButtonPressed()` - Test if the button was pressed the last time it was sampled.
+
+- `bool` `isLongPressed()` - Test it the button is in long-pressed state.
+
+- `unsigned long` `getStartTime()` - Returns the time of the first button press.
+
+- `unsigned long` `getLastTransitionTime()` - Time of last transition (actually, event time).
+
+## Operators
+- `bool` `operator==(EButton &other)` - Tests if the two have the same address.
+
+--------------------------------------------------
+
+## Version History
+
+* `1.0 (2017-02-18)`: Original release
