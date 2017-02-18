@@ -33,8 +33,8 @@ void doubleClickHandler(EButton &btn) {
 	Serial.print(F("DOUBLE_CLICK"));
 	print(btn);
 }
-void anyClickHandler(EButton &btn) {
-	Serial.print(F("ANY_CLICK"));
+void doneClickingHandler(EButton &btn) {
+	Serial.print(F("DONE_CLICKING"));
 	print(btn);
 }
 
@@ -69,7 +69,7 @@ void setup() {
 
 	button.attachTransition(transitionHandler);
 	button.attachEachClick(eachClickHandler);
-	button.attachAnyClick(anyClickHandler);
+	button.attachDoneClicking(doneClickingHandler);
 	button.attachSingleClick(singleClickHandler);
 	button.attachDoubleClick(doubleClickHandler);
 	button.attachLongPressStart(pressStartHandler);
