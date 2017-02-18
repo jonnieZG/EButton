@@ -66,7 +66,7 @@ Events are listed in their order of appearence:
 4. `SINGLE_CLICK` - triggered when there was exactly one click;
 5. `DOUBLE_CLICK` - triggered when there were exactly two clicks;
 6. `LONG_PRESS_START`  triggered once, at the beginning of a long press (after a `TRANSITION` to pressed);
-7. `DURING_LONG_PRESS` - triggered on each tick() while in `LONG_PRESSED` state;
+7. `DURING_LONG_PRESS` - triggered on each next tick() while in `LONG_PRESSED` state (*not in the same cycle with `LONG_PRESS_START`*);
 8. `LONG_PRESS_END` - triggered once, at the end of a long press (after a `TRANSITION` to released).
 
 Generally, in most of cases it will be enough to handle a SINGLE_CLICK, but that is up to you.
@@ -85,7 +85,7 @@ triggered*! Instead, the following sequence of events will be triggered:
 3. `EACH_CLICK` (after TRANSITION of the first-key release)
 4. `TRANSITION` (after second key-down)
 5. `LONG_PRESS_START` (1 second after the key was pressed and held pressed)
-6. `DURING_LONG_PRESS` (on each tick until the key is released)
+6. `DURING_LONG_PRESS` (on each next tick until the key is released)
 7. `LONG_PRESS_END` (when the key is finally released)
 
 Furhermore, *after the long press has ended, the button's state will be reset*. This will result in any further clicks that might be
