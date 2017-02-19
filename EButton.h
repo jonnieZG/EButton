@@ -50,7 +50,9 @@
 
 // -------- Default Timings in milliseconds (can be modified using setters) --------
 #define EBUTTON_DEFAULT_DEBOUNCE		50
+#if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 #define EBUTTON_DEFAULT_CLICK			150
+#endif
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
 #define EBUTTON_DEFAULT_LONG_PRESS		1000
 #endif
@@ -78,7 +80,9 @@ public:
 	void setDebounceTime(byte time);
 	// Click time - delay after the button was released, when clicks counting ends.
 	// (Delay before triggering singleClick, doubleClick, or doneClicking event.)
+#if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 	void setClickTime(unsigned int time);
+#endif
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
 	// Long-Press time - minimum time to keep the button pressed in order to start LONG_PRESSED state.
 	void setLongPressTime(unsigned int time);
@@ -144,7 +148,9 @@ private:
 	// ----- Configuration-specific fields -----
 	byte pin;										// Attached pin
 	byte debounceTime = EBUTTON_DEFAULT_DEBOUNCE;	// Debounce time in ms (between 0 and 255)
+#if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 	unsigned int clickTime = EBUTTON_DEFAULT_CLICK;	// Time the button has to be released in order to complete counting clicks
+#endif
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
 	unsigned int longPressTime = EBUTTON_DEFAULT_LONG_PRESS;	// Minimum press time
 #endif
