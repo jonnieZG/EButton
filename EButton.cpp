@@ -11,9 +11,11 @@ void EButton::setDebounceTime(byte time) {
 	debounceTime = time;
 }
 
+#if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 void EButton::setClickTime(unsigned int time) {
 	clickTime = time;
 }
+#endif
 
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
 void EButton::setLongPressTime(unsigned int time) {
@@ -149,6 +151,7 @@ void EButton::tick() {
 			// If the button is pressed
 			transition(now);
 		} else {
+#if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 			if (sinceLastTransition >= clickTime) {
 #ifdef EBUTTON_SUPPORT_DONE_CLICKING
 				// Handling any-click
@@ -167,6 +170,7 @@ void EButton::tick() {
 				// if the button is not pressed for long enough, then reset the FSM
 				reset();
 			}
+#endif
 		}
 	}
 #ifdef EBUTTON_SUPPORT_LONG_PRESS
