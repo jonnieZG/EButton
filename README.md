@@ -78,7 +78,7 @@ Generally, in most of cases it will be enough to handle a SINGLE_CLICK, but that
 Events `DONE_CLICKING`, `SINGLE_CLICK`, and `DOUBLE_CLICK` will be triggered *only after the last click*.
 
 Therefore, if you perform a click, immediatelly followed by a long press, the `DONE_CLICKING` and `SINGLE_CLICK` events *will not be
-triggered*! Instead, the following sequence of events will be triggered:
+triggered*, and that is by design! Instead, the following sequence of events will be triggered:
 
 1. `TRANSITION` (after first key-down)
 2. `TRANSITION` (after first key-release)
