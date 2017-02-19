@@ -122,7 +122,7 @@ To disable a feature, just comment out its corresponding `#define` entry in the 
 > single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count. You can then also disable
 > all other features that you don't need.
 >
-> Another way of getting a small footprint in simple cases where you just need to detect each click, regardless their count, is to
+> Another way of getting a small footprint in simple cases where you just need to **detect each click, regardless their count**, is to
 > disable all features except the `EBUTTON_SUPPORT_EACH_CLICK`.
 
 ## Debouncing
