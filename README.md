@@ -119,7 +119,11 @@ To disable a feature, just comment out its corresponding `#define` entry in the 
 #define EBUTTON_SUPPORT_LONG_PRESS
 ```
 > **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `DONE_CLICKING` event to process
-> single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count.
+> single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count. You can then also disable
+> all other features that you don't need.
+>
+> Another way of getting a small footprint in simple cases where you just need to detect each click, regardless their count, is to
+> disable all features except the `EBUTTON_SUPPORT_EACH_CLICK`.
 
 ## Debouncing
 Due to imperfections of electrical contacts, in most buttons and switches, the state does not just go from one state to another and
