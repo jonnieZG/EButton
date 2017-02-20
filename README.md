@@ -84,15 +84,15 @@ Events `DONE_CLICKING`, `SINGLE_CLICK`, and `DOUBLE_CLICK` will be triggered *on
 Therefore, if you perform a click, immediatelly followed by a long press, the `DONE_CLICKING` and `SINGLE_CLICK` events *will not be
 triggered*, and that is by design! Instead, the following sequence of events will be triggered:
 
-1. `TRANSITION` (after first key-down)
-2. `TRANSITION` (after first key-release)
-3. `EACH_CLICK` (after TRANSITION of the first-key release)
-4. `TRANSITION` (after second key-down)
+1. `TRANSITION` (on the first key-down)
+2. `TRANSITION` (on fthe irst key-release)
+3. `EACH_CLICK` (after the TRANSITION of the first-key release)
+4. `TRANSITION` (on the second key-down)
 5. `LONG_PRESS_START` (1 second after the key was pressed and held pressed)
 6. `DURING_LONG_PRESS` (on each next tick until the key is released)
 7. `LONG_PRESS_END` (when the key is finally released)
 
-Furhermore, *after the long press has ended, the button's state will be reset*. This will result in any further clicks that might be
+Furhermore, *after the long-Press has ended, the button's state will be reset*. This will result in any further clicks that might be
 following the long press, being interpreted as a new series of clicks, separate from the previous sequence.
 
 ## Handler Methods
