@@ -126,7 +126,7 @@ void EButton::tick() {
 		// If the state was idle
 		if (buttonPressed) {
 			//... and the button is pressed now
-			startTime = now;		// remember when the first click was detected
+			startTime = lastTransitionTime = now;		// remember when the first click was detected
 			transition(now);		// call transition method
 		}
 	} else if (state == EBUTTON_STATE_COUNTING_CLICKS_DOWN) {
@@ -190,7 +190,6 @@ void EButton::tick() {
 
 void EButton::transition(unsigned long now) {
 	// Performed when a click transition is detected
-	lastTransitionTime = now;						// remember last transition time
 	if (buttonPressed) {
 		state = EBUTTON_STATE_COUNTING_CLICKS_DOWN;	// change to COUNTING_CLICKS_DOWN state
 	} else {
@@ -224,4 +223,5 @@ void EButton::transition(unsigned long now) {
 #endif
 	}
 #endif
+	lastTransitionTime = now;						// remember last transition time
 }
