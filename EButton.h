@@ -136,7 +136,7 @@ public:
 	// The time of the first button press
 	unsigned long getStartTime();
 
-	// Time of last transition
+	// Time of the previous transition
 	unsigned long getLastTransitionTime();
 
 	// Tests if the two have the same address
