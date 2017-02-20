@@ -332,7 +332,7 @@ void loop() {
 
 - `unsigned long` `getStartTime()` - Returns the time of the first button press.
 
-- `unsigned long` `getLastTransitionTime()` - Time of a previous transition. Returns 0 for the first transition.
+- `unsigned long` `getLastTransitionTime()` - Time of a previous transition. Returns startTime for the first transition.
 
 ## Operators
 - `bool` `operator==(EButton &other)` - Tests if the two have the same address.
