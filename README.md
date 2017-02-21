@@ -109,7 +109,8 @@ All handler methods are optional, and initially set to `NULL`.
 
 > **NOTE:** Trigger methods should be **short and fast**. Instead of running a complex operation in a handler method, rather use it
 > to set a flag indicating that a specific operation has to be performed later on in the code. This especially applies to attempting
-> recursive calls to the `tick()` method from within itself - which should **never** be done, because it will most likely end in tears!
+> recursive calls to the `tick()` method from within a handler method - which should be avoided, because it will most likely end in 
+> tears! 
 
 ## Minimizing Memory Footprint
 If the memory becomes an issue in your project, you can easily decrease the driver's footprint by disabling support for unneeded events.
