@@ -68,7 +68,7 @@ void EButton::attachLongPressEnd(EButtonEventHandler method) {
 void EButton::reset() {
 	state = EBUTTON_STATE_IDLE;
 	startTime = 0;
-	lastTransitionTime = 0;
+	prevTransitionTime = 0;
 	clicks = 0;
 }
 
@@ -94,8 +94,8 @@ unsigned long EButton::getStartTime() {
 	return startTime;
 }
 
-unsigned long EButton::getLastTransitionTime() {
-	return lastTransitionTime;
+unsigned long EButton::getPrevTransitionTime() {
+	return prevTransitionTime;
 }
 
 bool EButton::operator==(EButton &other) {
@@ -113,7 +113,7 @@ void EButton::tick() {
 	}
 #endif
 
-	unsigned long sinceLastTransition = now - lastTransitionTime;
+	unsigned long sinceLastTransition = now - prevTransitionTime;
 	if (sinceLastTransition < debounceTime) {
 		// Skip the rest if there is a sample delay applied
 		return;
@@ -126,7 +126,7 @@ void EButton::tick() {
 		// If the state was idle
 		if (buttonPressed) {
 			//... and the button is pressed now
-			startTime = lastTransitionTime = now;		// remember when the first click was detected
+			startTime = prevTransitionTime = now;		// remember when the first click was detected
 			transition(now);		// call transition method
 		}
 	} else if (state == EBUTTON_STATE_COUNTING_CLICKS_DOWN) {
@@ -223,5 +223,5 @@ void EButton::transition(unsigned long now) {
 #endif
 	}
 #endif
-	lastTransitionTime = now;						// remember last transition time
+	prevTransitionTime = now;						// remember last transition time
 }
