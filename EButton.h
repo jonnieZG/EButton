@@ -137,7 +137,7 @@ public:
 	unsigned long getStartTime();
 
 	// Time of the previous transition
-	unsigned long getLastTransitionTime();
+	unsigned long getPrevTransitionTime();
 
 	// Tests if the two have the same address
 	bool operator==(EButton &other);
@@ -178,7 +178,7 @@ private:
 	byte state;							// Current FSM state
 	bool buttonPressed;					// last button state
 	unsigned long startTime;			// when the first click was detected
-	unsigned long lastTransitionTime;	// last time the button state has changed UP->DOWN, or DOWN->UP
+	unsigned long prevTransitionTime;	// previous time the button state has changed UP->DOWN, or DOWN->UP
 	byte clicks;						// Number of clicks performed
 };
 
