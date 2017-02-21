@@ -11,8 +11,8 @@ void print(EButton &btn) {
 	Serial.print(btn.getClicks());
 	Serial.print(F(", startTime="));
 	Serial.print(btn.getStartTime());
-	Serial.print(F(", lastTransitionTime="));
-	Serial.print(btn.getLastTransitionTime());
+	Serial.print(F(", prevTransitionTime="));
+	Serial.print(btn.getPrevTransitionTime());
 	Serial.println(F("]"));
 }
 
