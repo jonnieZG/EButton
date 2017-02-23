@@ -17,7 +17,7 @@ void EButton::setClickTime(unsigned int time) {
 }
 #endif
 
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 void EButton::setLongPressTime(unsigned int time) {
 	longPressTime = time;
 }
@@ -51,15 +51,17 @@ void EButton::attachDoubleClick(EButtonEventHandler method) {
 }
 #endif
 
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_START
 void EButton::attachLongPressStart(EButtonEventHandler method) {
 	longPressStartMethod = method;
 }
-
+#endif
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_DURING
 void EButton::attachDuringLongPress(EButtonEventHandler method) {
 	duringLongPresstMethod = method;
 }
-
+#endif
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_END
 void EButton::attachLongPressEnd(EButtonEventHandler method) {
 	longPressEndMethod = method;
 }
@@ -68,7 +70,6 @@ void EButton::attachLongPressEnd(EButtonEventHandler method) {
 void EButton::reset() {
 	state = EBUTTON_STATE_IDLE;
 	startTime = 0;
-	prevTransitionTime = 0;
 	clicks = 0;
 }
 
@@ -84,7 +85,7 @@ bool EButton::isButtonPressed() {
 	return buttonPressed;
 }
 
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 bool EButton::isLongPressed() {
 	return state == EBUTTON_STATE_LONG_PRESSED;
 }
@@ -105,7 +106,7 @@ bool EButton::operator==(EButton &other) {
 void EButton::tick() {
 	unsigned long now = millis();
 
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_DURING
 	if (state == EBUTTON_STATE_LONG_PRESSED) {
 		// Call during press method if in PRESSED state - ON EACH TICK!
 		if (duringLongPresstMethod != NULL)
@@ -126,20 +127,22 @@ void EButton::tick() {
 		// If the state was idle
 		if (buttonPressed) {
 			//... and the button is pressed now
-			startTime = prevTransitionTime = now;		// remember when the first click was detected
+			startTime = now;		// remember when the first click was detected
 			transition(now);		// call transition method
 		}
 	} else if (state == EBUTTON_STATE_COUNTING_CLICKS_DOWN) {
 		if (buttonPressed) {
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 			// if the button is still pressed
 			if (sinceLastTransition >= longPressTime) {
 				// and it's been pressed for long enough since last transition...
 				state = EBUTTON_STATE_LONG_PRESSED;			// change to LONG_PRESSED state
 
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_START
 				// Call the press start method
 				if (longPressStartMethod != NULL)
 					longPressStartMethod(*this);
+#endif
 			}
 #endif
 		} else {
@@ -173,14 +176,15 @@ void EButton::tick() {
 #endif
 		}
 	}
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 	else if (state == EBUTTON_STATE_LONG_PRESSED) {
 		if (!buttonPressed) {
 			// Button was released from pressed state
 			transition(now);
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_END
 			if (longPressEndMethod != NULL)
 				longPressEndMethod(*this);
-
+#endif
 			// Reset the FSM
 			reset();
 		}
@@ -193,13 +197,13 @@ void EButton::transition(unsigned long now) {
 	if (buttonPressed) {
 		state = EBUTTON_STATE_COUNTING_CLICKS_DOWN;	// change to COUNTING_CLICKS_DOWN state
 	} else {
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 		if (state != EBUTTON_STATE_LONG_PRESSED) {
 			// Count a click only if we were not in PRESSED state
 #endif
 			state = EBUTTON_STATE_COUNTING_CLICKS_UP;	// change to COUNTING_CLICKS_DOWN state
 			clicks++;									// increase clicks on transition to UP
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 		}
 #endif
 	}
@@ -212,13 +216,13 @@ void EButton::transition(unsigned long now) {
 
 #ifdef EBUTTON_SUPPORT_EACH_CLICK
 	if (!buttonPressed) {
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 		if (state != EBUTTON_STATE_LONG_PRESSED) {
 #endif
 			// if released and it was not in PRESSED mode, then we have a CLICK event
 			if (eachClickMethod != NULL)
 				eachClickMethod(*this);
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 		}
 #endif
 	}
