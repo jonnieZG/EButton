@@ -1,5 +1,5 @@
 /*
- * EButton - Customizable button-driver class with a small footprint, supporting debouncing, and various events.
+ * EButton v1.1.0 - Customizable button-driver class with a small footprint, supporting debouncing, and various events.
  *
  * Its already small footprint can be additionally minimized by disabling unneeded features using #define switches.
  *
@@ -29,9 +29,9 @@
  * allowing you to read details about the event, like a number of clicks, time of the first click, etc.
  *
  *
- *     Version: 1.0
+ *     Version: 1.1.0
  *     License: MIT
- *  Created on: 2017-02-18
+ *  Created on: 2017-02-23
  *      Author: JonnieZG
  */
 
@@ -46,14 +46,16 @@
 #define EBUTTON_SUPPORT_EACH_CLICK
 #define EBUTTON_SUPPORT_DONE_CLICKING
 #define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
-#define EBUTTON_SUPPORT_LONG_PRESS
+#define EBUTTON_SUPPORT_LONG_PRESS_START
+#define EBUTTON_SUPPORT_LONG_PRESS_DURING
+#define EBUTTON_SUPPORT_LONG_PRESS_END
 
 // -------- Default Timings in milliseconds (can be modified using setters) --------
 #define EBUTTON_DEFAULT_DEBOUNCE		50
 #if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 #define EBUTTON_DEFAULT_CLICK			150
 #endif
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 #define EBUTTON_DEFAULT_LONG_PRESS		1000
 #endif
 // ---------------------------------------------------------------------------------
@@ -62,7 +64,7 @@
 #define EBUTTON_STATE_IDLE					0
 #define EBUTTON_STATE_COUNTING_CLICKS_DOWN	1
 #define EBUTTON_STATE_COUNTING_CLICKS_UP	2
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 #define EBUTTON_STATE_LONG_PRESSED			3
 #endif
 class EButton;
@@ -83,7 +85,7 @@ public:
 #if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 	void setClickTime(unsigned int time);
 #endif
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 	// Long-Press time - minimum time to keep the button pressed in order to start LONG_PRESSED state.
 	void setLongPressTime(unsigned int time);
 #endif
@@ -105,11 +107,15 @@ public:
 	// Attaches a method that is triggered when there were exactly two clicks - triggered fifth
 	void attachDoubleClick(EButtonEventHandler method);
 #endif
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_START
 	// Attaches a method that is triggered once, at the beginning of a long press - triggered after the transition to pressed
 	void attachLongPressStart(EButtonEventHandler method);
+#endif
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_DURING
 	// Attaches a method that is triggered on each tick() during a long press - triggered after pressStart
 	void attachDuringLongPress(EButtonEventHandler method);
+#endif
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_END
 	// Attaches a method that is triggered once, at the end of a long press - triggered after transition to released
 	void attachLongPressEnd(EButtonEventHandler method);
 #endif
@@ -128,7 +134,7 @@ public:
 	// Test if the button was pressed the last time it was sampled
 	bool isButtonPressed();
 
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 	// Test it the button is in long-pressed state
 	bool isLongPressed();
 #endif
@@ -151,7 +157,7 @@ private:
 #if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 	unsigned int clickTime = EBUTTON_DEFAULT_CLICK;	// Time the button has to be released in order to complete counting clicks
 #endif
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#if defined(EBUTTON_SUPPORT_LONG_PRESS_START) || defined(EBUTTON_SUPPORT_LONG_PRESS_DURING) || defined(EBUTTON_SUPPORT_LONG_PRESS_END)
 	unsigned int longPressTime = EBUTTON_DEFAULT_LONG_PRESS;	// Minimum press time
 #endif
 	bool pressedState;								// Logical value of the pressed state
@@ -169,17 +175,21 @@ private:
 #ifdef EBUTTON_SUPPORT_DONE_CLICKING
 	EButtonEventHandler doneClickingMethod = NULL;
 #endif
-#ifdef EBUTTON_SUPPORT_LONG_PRESS
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_START
 	EButtonEventHandler longPressStartMethod = NULL;
+#endif
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_DURING
 	EButtonEventHandler duringLongPresstMethod = NULL;
+#endif
+#ifdef EBUTTON_SUPPORT_LONG_PRESS_END
 	EButtonEventHandler longPressEndMethod = NULL;
 #endif
 	// ----- State-specific fields -----
-	byte state;							// Current FSM state
-	bool buttonPressed;					// last button state
-	unsigned long startTime;			// when the first click was detected
-	unsigned long prevTransitionTime;	// previous time the button state has changed UP->DOWN, or DOWN->UP
-	byte clicks;						// Number of clicks performed
+	byte state;								// Current FSM state
+	bool buttonPressed;						// last button state
+	unsigned long startTime;				// when the first click was detected
+	unsigned long prevTransitionTime = 0;	// previous time the button state has changed UP->DOWN, or DOWN->UP
+	byte clicks;							// Number of clicks performed
 };
 
 #endif /* EBUTTON_H_ */
