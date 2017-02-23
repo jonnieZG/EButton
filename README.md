@@ -114,6 +114,7 @@ All handler methods are optional, and initially set to `NULL`.
 
 ## Minimizing Memory Footprint
 If the memory becomes an issue in your project, you can easily decrease the driver's footprint by disabling support for unneeded events.
+That way you can make significant savings in your memory-critical projects.
 
 To disable a feature, just comment out its corresponding `#define` entry in the driver's header file:
 ```C++
@@ -121,7 +122,9 @@ To disable a feature, just comment out its corresponding `#define` entry in the 
 #define EBUTTON_SUPPORT_EACH_CLICK
 #define EBUTTON_SUPPORT_DONE_CLICKING
 #define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
-#define EBUTTON_SUPPORT_LONG_PRESS
+#define EBUTTON_SUPPORT_LONG_PRESS_START
+#define EBUTTON_SUPPORT_LONG_PRESS_DURING
+#define EBUTTON_SUPPORT_LONG_PRESS_ENG
 ```
 > **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `DONE_CLICKING` event to process
 > single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count. You can then also disable
@@ -346,4 +349,5 @@ void loop() {
 
 ## Version History
 
-* `1.0 (2017-02-18)`: Original release
+* `1.0.0 (2017-02-18)`: Original release
+* `1.1.0 (2017-02-23)`: Discrete enabling/disabling START, DURING and END support for LONG_PRESS
