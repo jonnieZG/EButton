@@ -1,9 +1,9 @@
-# EButton - Single Button Driver
+# EButton - Single Event-Based Button Driver
 
 ## Why This One?
-I wrote this library in need of a reliable, compact driver for controlling a single key in my **`Arduino`** projects, with debouncing
-being properly handled, and fine grained, well defined events. Besides that, I wanted a library that I would be able to easily strip of
-unneeded features, making its memory footprint as small as possible.
+**`EButton`** is short for "Event Button". I wrote this library in need of a reliable, compact driver for controlling a single key in 
+my **`Arduino`** projects, with debouncing being properly handled, and fine grained, well defined events. Besides that, I wanted a
+library that I would be able to easily strip of unneeded features, making its memory footprint as small as possible.
 
 ## Quick Start
 1. Include the library. *(doh!)*
