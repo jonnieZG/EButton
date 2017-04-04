@@ -1,4 +1,4 @@
-# EButton - Single Event-Based Button Driver
+# EButton - Event-Based Button Driver
 
 ## Why This One?
 **`EButton`** is short for "Event Button". I wrote this library in need of a reliable, compact driver for controlling a single key in 
