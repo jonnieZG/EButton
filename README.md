@@ -112,19 +112,19 @@ All handler methods are optional, and initially set to `NULL`.
 > recursive calls to the `tick()` method from within a handler method - which should be avoided, because it will most likely end in 
 > tears! 
 
-## Minimizing Memory Footprint
+## Minimizing Memory Footprint - Disabling Unneeded Features
 If the memory becomes an issue in your project, you can easily decrease the driver's footprint by disabling support for unneeded events.
 That way you can make significant savings in your memory-critical projects.
 
-To disable a feature, just comment out its corresponding `#define` entry in the driver's header file:
+To disable a feature, just add its corresponding `#define` entry before importing the driver's header file for the very first time,
+and don't forget to clean the project after making such a change:
 ```C++
-#define EBUTTON_SUPPORT_TRANSITION
-#define EBUTTON_SUPPORT_EACH_CLICK
-#define EBUTTON_SUPPORT_DONE_CLICKING
-#define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
-#define EBUTTON_SUPPORT_LONG_PRESS_START
-#define EBUTTON_SUPPORT_LONG_PRESS_DURING
-#define EBUTTON_SUPPORT_LONG_PRESS_ENG
+#define EBUTTON_SUPPORT_TRANSITION_DISABLED
+#define EBUTTON_SUPPORT_EACH_CLICK_DISABLED
+#define EBUTTON_SUPPORT_DONE_CLICKING_DISABLED
+#define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS_DISABLED
+#define EBUTTON_SUPPORT_LONG_PRESS_START_DISABLED
+#define EBUTTON_SUPPORT_LONG_PRESS_DURING_DISABLED
 ```
 > **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `DONE_CLICKING` event to process
 > single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count. You can then also disable
@@ -351,3 +351,4 @@ void loop() {
 
 * `1.0.0 (2017-02-18)`: Original release
 * `1.1.0 (2017-02-23)`: Discrete enabling/disabling START, DURING and END support for LONG_PRESS
+* `1.2.0 (2019-07-26)`: Changed way of disabling features, to allow specific per-project settings, without having to change the EButton.h file

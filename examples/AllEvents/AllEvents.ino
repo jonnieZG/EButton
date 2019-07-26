@@ -1,4 +1,14 @@
 #include "Arduino.h"
+
+// ------- Specify required features before including the EButton.h --------
+#define EBUTTON_SUPPORT_TRANSITION
+#define EBUTTON_SUPPORT_EACH_CLICK
+#define EBUTTON_SUPPORT_DONE_CLICKING
+#define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
+#define EBUTTON_SUPPORT_LONG_PRESS_START
+#define EBUTTON_SUPPORT_LONG_PRESS_DURING
+#define EBUTTON_SUPPORT_LONG_PRESS_END
+
 #include "EButton.h"
 
 EButton button(2);

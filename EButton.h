@@ -1,5 +1,5 @@
 /*
- * EButton v1.1.0 - Customizable button-driver class with a small footprint, supporting debouncing, and various events.
+ * EButton v1.2.0 - Customizable button-driver class with a small footprint, supporting debouncing, and various events.
  *
  * Its already small footprint can be additionally minimized by disabling unneeded features using #define switches.
  *
@@ -29,9 +29,9 @@
  * allowing you to read details about the event, like a number of clicks, time of the first click, etc.
  *
  *
- *     Version: 1.1.0
+ *     Version: 1.2.0
  *     License: MIT
- *  Created on: 2017-02-23
+ *  Created on: 2017-02-27
  *      Author: JonnieZG
  */
 
@@ -41,14 +41,39 @@
 #include "Arduino.h"
 
 // --------------------------- Optional Feature Switches ---------------------------
-// You can disable any of the features you don't need, to minimize memory footprint
+// You can disable the features you don't need, to minimize memory footprint
+// Just include some of the following defines before including EButton.h and
+// don't forget to clean the project after making changes to these options!
+
+//#define EBUTTON_SUPPORT_TRANSITION_DISABLED
+//#define EBUTTON_SUPPORT_EACH_CLICK_DISABLED
+//#define EBUTTON_SUPPORT_DONE_CLICKING_DISABLED
+//#define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS_DISABLED
+//#define EBUTTON_SUPPORT_LONG_PRESS_START_DISABLED
+//#define EBUTTON_SUPPORT_LONG_PRESS_DURING_DISABLED
+
+
+#ifndef EBUTTON_SUPPORT_TRANSITION_DISABLED
 #define EBUTTON_SUPPORT_TRANSITION
+#endif
+#ifndef EBUTTON_SUPPORT_EACH_CLICK_DISABLED
 #define EBUTTON_SUPPORT_EACH_CLICK
+#endif
+#ifndef EBUTTON_SUPPORT_DONE_CLICKING_DISABLED
 #define EBUTTON_SUPPORT_DONE_CLICKING
+#endif
+#ifndef EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS_DISABLED
 #define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS
+#endif
+#ifndef EBUTTON_SUPPORT_LONG_PRESS_START_DISABLED
 #define EBUTTON_SUPPORT_LONG_PRESS_START
+#endif
+#ifndef EBUTTON_SUPPORT_LONG_PRESS_DURING_DISABLED
 #define EBUTTON_SUPPORT_LONG_PRESS_DURING
+#endif
+#ifndef EBUTTON_SUPPORT_LONG_PRESS_END_DISABLED
 #define EBUTTON_SUPPORT_LONG_PRESS_END
+#endif
 
 // -------- Default Timings in milliseconds (can be modified using setters) --------
 #define EBUTTON_DEFAULT_DEBOUNCE		50

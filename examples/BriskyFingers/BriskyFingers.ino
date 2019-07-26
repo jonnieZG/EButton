@@ -1,4 +1,8 @@
 #include "Arduino.h"
+
+// ------- Specify required features before including the EButton.h --------
+#define EBUTTON_SUPPORT_DONE_CLICKING
+
 #include "EButton.h"
 
 EButton button(2);
