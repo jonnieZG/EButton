@@ -133,6 +133,11 @@ and don't forget to clean the project after making such a change:
 > Another way of getting a small footprint in simple cases where you just need to **detect each click, regardless their count**, is to
 > disable all features except the `EBUTTON_SUPPORT_EACH_CLICK`.
 
+> **CAVEAT:** In some assemblers you might get unwanted results and crashes when using a `DISABLED` define, due to the
+badly implemented
+> include/compiling order. If you experience unexplicable crashes and strange behavior, try removing all the `DISABLED` defines 
+> and recompile the code.  
+
 ## Debouncing
 Due to imperfections of electrical contacts, in most buttons and switches, the state does not just go from one state to another and
 stays there. Instead, there is always a certain period (depending on the actual switch, between a few and several dozens of milliseconds),
@@ -352,3 +357,4 @@ void loop() {
 * `1.0.0 (2017-02-18)`: Original release
 * `1.1.0 (2017-02-23)`: Discrete enabling/disabling START, DURING and END support for LONG_PRESS
 * `1.2.0 (2019-07-26)`: Changed way of disabling features, to allow specific per-project settings, without having to change the EButton.h file
+* `1.2.1 (2022-02-01)`: Added missing #defines to the comments in EButton.h and the keywords.txt files  
