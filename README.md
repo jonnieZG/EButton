@@ -125,6 +125,7 @@ and don't forget to clean the project after making such a change:
 #define EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS_DISABLED
 #define EBUTTON_SUPPORT_LONG_PRESS_START_DISABLED
 #define EBUTTON_SUPPORT_LONG_PRESS_DURING_DISABLED
+#define EBUTTON_SUPPORT_LONG_PRESS_END_DISABLED
 ```
 > **NOTE:** If you disable `EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS`, then you can use the `DONE_CLICKING` event to process
 > single, double, and any other number of clicks. Just use `getClicks()` to get the final clicks count. You can then also disable
