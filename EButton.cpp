@@ -1,9 +1,10 @@
 #include "EButton.h"
 
-EButton::EButton(byte pin, bool pressedLow) {
+EButton::EButton(byte pin, bool pressedLow, byte id) {
 	this->pin = pin;
 	pinMode(pin, pressedLow ? INPUT_PULLUP : INPUT);
 	pressedState = !pressedLow;
+	this->id = id;
 	reset();
 }
 
@@ -75,6 +76,10 @@ void EButton::reset() {
 
 byte EButton::getPin() {
 	return pin;
+}
+
+byte EButton::getID() {
+	return id;
 }
 
 byte EButton::getClicks() {

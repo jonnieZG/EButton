@@ -101,7 +101,7 @@ typedef void (*EButtonEventHandler)(EButton&);
 class EButton {
 public:
 	// Constructor.
-	EButton(byte pin, bool pressedLow = true);
+	EButton(byte pin, bool pressedLow = true, byte id = 0);
 
 	// Debounce time - delay after the first transition, before sampling the next state.
 	void setDebounceTime(byte time);
@@ -153,6 +153,9 @@ public:
 	// Attached pin number
 	byte getPin();
 
+	// Button ID
+	byte getID();
+
 	// Number of clicks performed
 	byte getClicks();
 
@@ -178,6 +181,7 @@ private:
 
 	// ----- Configuration-specific fields -----
 	byte pin;										// Attached pin
+	byte id;										// Button ID
 	byte debounceTime = EBUTTON_DEFAULT_DEBOUNCE;	// Debounce time in ms (between 0 and 255)
 #if defined(EBUTTON_SUPPORT_DONE_CLICKING) || defined(EBUTTON_SUPPORT_SINGLE_AND_DOUBLE_CLICKS)
 	unsigned int clickTime = EBUTTON_DEFAULT_CLICK;	// Time the button has to be released in order to complete counting clicks
