@@ -358,4 +358,5 @@ void loop() {
 * `1.0.0 (2017-02-18)`: Original release
 * `1.1.0 (2017-02-23)`: Discrete enabling/disabling START, DURING and END support for LONG_PRESS
 * `1.2.0 (2019-07-26)`: Changed way of disabling features, to allow specific per-project settings, without having to change the EButton.h file
-* `1.2.1 (2022-02-01)`: Added missing #defines to the comments in EButton.h and the keywords.txt files  
+* `1.2.1 (2022-02-01)`: Added missing #defines to the comments in EButton.h and the keywords.txt files
+* `1.3.0 (2023-02-13)`: Added optional button IDs for shared callback functions.
