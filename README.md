@@ -302,8 +302,10 @@ void loop() {
 
 ### `EButton` class
 
-- `EButton(byte pin, bool pressedLow = true)` - Constructor specifying attached pin and used logic. `pressedLow` is `true`,
-  if using a pull-down switch.
+- `EButton(byte pin, bool pressedLow = true, byte id = 0, bool externalPullup = false)` - Constructor specifying attached pin and
+  used logic. `pressedLow` is `true` if using a pull-down switch. `id` is an optional parameter for assigning an ID to identify
+  the key in shared callback functions. `externalPullup` should be set to `true` when using external pull-up (makes sense only when
+  `pressedLow` is `true`).
   
 - `void` `setDebounceTime(byte time)` - Setting debounce time in milliseconds. Default is `EBUTTON_DEFAULT_DEBOUNCE`.
 
@@ -360,3 +362,4 @@ void loop() {
 * `1.2.0 (2019-07-26)`: Changed way of disabling features, to allow specific per-project settings, without having to change the EButton.h file
 * `1.2.1 (2022-02-01)`: Added missing #defines to the comments in EButton.h and the keywords.txt files
 * `1.3.0 (2023-02-13)`: Added optional button IDs for shared callback functions.
+* `1.4.0 (2026-02-18)`: Added optional constructor parameter for disabling the internal pull-up when using an external one.

@@ -101,7 +101,7 @@ typedef void (*EButtonEventHandler)(EButton&);
 class EButton {
 public:
 	// Constructor.
-	EButton(byte pin, bool pressedLow = true, byte id = 0);
+	EButton(byte pin, bool pressedLow = true, byte id = 0, bool externalPullup = false);
 
 	// Debounce time - delay after the first transition, before sampling the next state.
 	void setDebounceTime(byte time);

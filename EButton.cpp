@@ -1,8 +1,8 @@
 #include "EButton.h"
 
-EButton::EButton(byte pin, bool pressedLow, byte id) {
+EButton::EButton(byte pin, bool pressedLow, byte id, bool externalPullup) {
 	this->pin = pin;
-	pinMode(pin, pressedLow ? INPUT_PULLUP : INPUT);
+	pinMode(pin, pressedLow ? (externalPullup ? INPUT : INPUT_PULLUP) : INPUT);
 	pressedState = !pressedLow;
 	this->id = id;
 	reset();
