@@ -363,3 +363,4 @@ void loop() {
 * `1.2.1 (2022-02-01)`: Added missing #defines to the comments in EButton.h and the keywords.txt files
 * `1.3.0 (2023-02-13)`: Added optional button IDs for shared callback functions.
 * `1.4.0 (2026-02-18)`: Added optional constructor parameter for disabling the internal pull-up when using an external one.
+* `1.4.1 (2026-08-07)`: Fixed debounce filtering of short pulses.

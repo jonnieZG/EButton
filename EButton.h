@@ -1,5 +1,5 @@
 /*
- * EButton v1.2.1 - Customizable button-driver class with a small footprint, supporting debouncing, and various events.
+ * EButton v1.4.1 - Customizable button-driver class with a small footprint, supporting debouncing, and various events.
  *
  * Its already small footprint can be additionally minimized by disabling unneeded features using #define switches.
  *
@@ -29,7 +29,7 @@
  * allowing you to read details about the event, like a number of clicks, time of the first click, etc.
  *
  *
- *     Version: 1.2.1
+ *     Version: 1.4.1
  *     License: MIT
  *  Created on: 2022-01-02
  *      Author: JonnieZG
