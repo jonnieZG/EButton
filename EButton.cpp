@@ -119,14 +119,20 @@ void EButton::tick() {
 	}
 #endif
 
-	unsigned long sinceLastTransition = now - prevTransitionTime;
-	if (sinceLastTransition < debounceTime) {
-		// Skip the rest if there is a sample delay applied
-		return;
+	const bool sampledState = digitalRead(pin) == pressedState;
+	if (sampledState != sampledButtonPressed) {
+		sampledButtonPressed = sampledState;
+		sampledStateChangedAt = now;
 	}
 
-	// Sample button state
-	buttonPressed = digitalRead(pin) == pressedState;
+	if (sampledButtonPressed != buttonPressed) {
+		if (now - sampledStateChangedAt < debounceTime) {
+			return;
+		}
+		buttonPressed = sampledButtonPressed;
+	}
+
+	unsigned long sinceLastTransition = now - prevTransitionTime;
 
 	if (state == EBUTTON_STATE_IDLE) {
 		// If the state was idle

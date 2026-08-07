@@ -215,7 +215,9 @@ private:
 #endif
 	// ----- State-specific fields -----
 	byte state;								// Current FSM state
-	bool buttonPressed;						// last button state
+	bool buttonPressed = false;				// Current debounced button state
+	bool sampledButtonPressed = false;			// Most recent sampled button state
+	unsigned long sampledStateChangedAt = 0;	// Time the sampled state last changed
 	unsigned long startTime;				// when the first click was detected
 	unsigned long prevTransitionTime = 0;	// previous time the button state has changed UP->DOWN, or DOWN->UP
 	byte clicks;							// Number of clicks performed
